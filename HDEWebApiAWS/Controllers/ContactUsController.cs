@@ -39,14 +39,22 @@ namespace HDEWebApiAWS.Controllers
         {
             string connectionString = DBHelper.GetRDSConnectionString();
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            try
             {
-                string query = "Insert into HdeBuyNow.dbo.contact_us(contact_us_id, contact_us_name, contact_us_email, contact_us_message) " +
-                    "values('" + System.Guid.NewGuid() + "','" + name + "','" + email + "','" + message  + "')";
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    string query = "Insert into contact_us(contact_us_id, contact_us_name, contact_us_email, contact_us_message) " +
+                        "values('" + System.Guid.NewGuid() + "','" + name + "','" + email + "','" + message + "')";
 
-                SqlCommand cmd = new SqlCommand(query, con);
-                con.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message.ToString());
+                throw;
             }
 
             // your code here
