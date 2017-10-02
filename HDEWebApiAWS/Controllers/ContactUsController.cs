@@ -34,6 +34,13 @@ namespace HDEWebApiAWS.Controllers
             return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Add the contact us message to the DB
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
         [HttpGet("ContactMessage/{name}/{email}/{message}")]
         public JsonResult ContactMessage(string name, string email, string message)
         {
