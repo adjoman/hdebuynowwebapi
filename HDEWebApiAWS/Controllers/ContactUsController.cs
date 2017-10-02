@@ -1,7 +1,9 @@
 ﻿
 using System;
 using System.Text;
+using HDEWebApiAWS.DB;
 using System.Net.Http;
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -35,6 +37,18 @@ namespace HDEWebApiAWS.Controllers
         [HttpGet("ContactMessage/{name}/{email}/{message}")]
         public JsonResult ContactMessage(string name, string email, string message)
         {
+            string connectionString = DBHelper.GetRDSConnectionString();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = "Insert into HdeBuyNow.dbo.contact_us(contact_us_id, contact_us_name, contact_us_email, contact_us_message) " +
+                    "values('" + System.Guid.NewGuid() + "','" + name + "','" + email + "','" + message  + "')";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+            }
+
             // your code here
             return new JsonResult(true);
         }
